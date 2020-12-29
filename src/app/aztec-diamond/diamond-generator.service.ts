@@ -64,11 +64,25 @@ export class DiamondGeneratorService {
     return new AztecDiamond(diamond.rows, [...diamond.blocks, ...newBlocks]);
   }
 
-  public detectEmptyBlocks(diamond: AztecDiamond): {x: number, y: number}[] {
+  public detectEmptyBlocks(diamond: AztecDiamond): {x: number; y: number}[] {
     const index = this.constructIndex(diamond);
-    const result: {x: number, y: number}[] = [];
-    const blocked: {x:number, y:number}[] = [];
+    const result: {x: number; y: number}[] = [];
+    const blocked: {x: number; y: number}[] = [];
     const yOffset = -diamond.rows.length / 2;
+    const isEmpty = (x: number, y: number): boolean => {
+      const i = y - yOffset;
+      if (i < 0 || i >= diamond.rows.length) {
+        return false;
+      }
+
+      const row = diamond.rows[y - yOffset];
+      if (x < row.offset || x >= row.offset + row.cells) {
+        return false;
+      }
+
+      return !(index.get(x)?.get(y)) && !blocked.some(b => b.x === x && b.y === y);
+    };
+
     for (let i = 0; i < diamond.rows.length; i++) {
       const row = diamond.rows[i];
       const y = i + yOffset;
@@ -83,20 +97,6 @@ export class DiamondGeneratorService {
       }
     }
     return result;
-
-    function isEmpty(x: number, y: number): boolean {
-      const i = y - yOffset;
-      if (i < 0 || i >= diamond.rows.length) {
-        return false;
-      }
-
-      const row = diamond.rows[y - yOffset];
-      if (x < row.offset || x >= row.offset + row.cells) {
-        return false;
-      }
-
-      return !(index.get(x)?.get(y)) && !blocked.some(b => b.x === x && b.y === y);
-    }
   }
 
   public generateEmptyBlock(x: number, y: number): DiamondBlock[] {
@@ -112,6 +112,14 @@ export class DiamondGeneratorService {
       return new DiamondBlock(opposing.x, opposing.y, block.direction);
     });
     return new AztecDiamond(diamond.rows, blocks);
+  }
+
+  public getOtherCell(block: DiamondBlock): {x: number; y: number} {
+    if (block.direction === 'up' || block.direction === 'down') {
+      return { x: block.x + 1, y: block.y };
+    } else {
+      return { x: block.x, y: block.y + 1 };
+    }
   }
 
   private constructIndex(diamond: AztecDiamond): Map<number, Map<number, DiamondBlock>> {
@@ -166,13 +174,5 @@ export class DiamondGeneratorService {
     }
 
     return new DiamondBlock(x, y, direction);
-  }
-
-  public getOtherCell(block: DiamondBlock): {x: number, y: number} {
-    if (block.direction === 'up' || block.direction === 'down') {
-      return { x: block.x + 1, y: block.y };
-    } else {
-      return { x: block.x, y: block.y + 1 };
-    }
   }
 }

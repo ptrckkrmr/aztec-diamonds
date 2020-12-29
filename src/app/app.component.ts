@@ -20,19 +20,19 @@ export class AppComponent {
     'Remove conflicting blocks',
     'Move blocks',
     'Fill empty spaces'
-  ]
+  ];
   nextStageIndex = 3;
 
   constructor(private readonly diamondGeneratorService: DiamondGeneratorService) {
     this.diamond = diamondGeneratorService.generateInitial();
   }
 
-  public nextStage() {
+  public nextStage(): void  {
     this.diamond = this.stages[this.nextStageIndex](this.diamond);
     this.nextStageIndex = (this.nextStageIndex + 1) % this.stages.length;
   }
 
-  public nextSize() {
+  public nextSize(): void {
     do {
       this.nextStage();
     }

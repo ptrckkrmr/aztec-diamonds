@@ -19,7 +19,7 @@ export class AztecDiamondComponent implements OnChanges {
   }
 
   public range(to: number): number[] {
-    return new Array(to).fill(null).map((_,i) => i);
+    return new Array(to).fill(null).map((_, i) => i);
   }
 
   public getX(x: number): number {
