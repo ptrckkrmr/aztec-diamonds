@@ -1,0 +1,31 @@
+$cell-size: 8px;
+
+.grid {
+  position: relative;
+}
+
+.cell {
+  position: absolute;
+  width: $cell-size;
+  height: $cell-size;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+}
+
+.block {
+  border: 1px solid #ddd;
+  position: absolute;
+  &.up, &.down {
+    width: 2*$cell-size;
+    height: $cell-size;
+  }
+  &.left, &.right {
+    width: $cell-size;
+    height: 2*$cell-size;
+  }
+
+  &.up { background-color: red; }
+  &.down { background-color: blue; }
+  &.left { background-color: yellow; }
+  &.right { background-color: green; }
+}

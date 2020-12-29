@@ -1,0 +1,12 @@
+<div class="grid">
+  <ng-container *ngFor="let row of diamond.rows; index as i">
+    <div class="cell" *ngFor="let cell of range(row.cells)"
+      [style.left]="(8 * getX(row.offset + cell)) + 'px'"
+      [style.top]="(8 * i) + 'px'">
+    </div>
+  </ng-container>
+  <div class="block" *ngFor="let block of diamond.blocks" [ngClass]="block.direction"
+    [style.left]="(8 * getX(block.x)) + 'px'"
+    [style.top]="(8 * getY(block.y)) + 'px'">
+  </div>
+</div>
